@@ -1,9 +1,8 @@
 // https://github.com/hujingshuang/MTrans/blob/master/tk/Google.js
 
-function token(a) {
-    var k = "";
-    var b = 406644;
-    var b1 = 3293161072;
+function token(a, tkk) {
+    var b = Number(tkk.split('.')[0])
+    var b1 = Number(tkk.split('.')[1])
 
     var jd = ".";
     var sb = "+-a^+6";
@@ -33,4 +32,8 @@ function RL(a, b) {
         a = b.charAt(c) == Yb ? a + d & 4294967295 : a ^ d
     }
     return a
+}
+
+module.exports = {
+    token: token
 }
