@@ -5,7 +5,10 @@
 <title>Translator</title>
 <style>
 html,body{width: 100%;height: auto;margin: 0;padding: 0;}
-body{overflow: hidden;}
+body{
+  overflow: hidden;
+  -webkit-app-region: drag;
+}
 
 ul,li{margin: 0;padding: 0;list-style: none;}
 
@@ -14,12 +17,14 @@ ul,li{margin: 0;padding: 0;list-style: none;}
   margin: 5px;
 }
 #input{
-  width: 490px;height: 50px;
+  width: 480px;height: 40px;
   display: block;float: left;
-  margin: 0;padding: 0;
+  margin: 5px;padding: 0;
   border: none;outline: none;
   font-size: 24px;
   font-weight: lighter;
+  line-height: 40px;
+  -webkit-app-region: no-drag;
 }
 .mode,.load{
   width: 50px;height: 50px;
@@ -29,8 +34,9 @@ ul,li{margin: 0;padding: 0;list-style: none;}
 }
 .mode img,.load img{
   width: 32px;height: 32px;
+  display: block;
+  margin: 9px;
   border: none;
-  vertical-align: middle;
 }
 
 #result li{
@@ -40,7 +46,8 @@ ul,li{margin: 0;padding: 0;list-style: none;}
   text-align: center;
 }
 #result li.active{
-  background: #ccc;
+  background: #1296db;
+  color: #fff;
 }
 </style>
 </head>

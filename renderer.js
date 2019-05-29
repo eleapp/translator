@@ -17,6 +17,7 @@ window.onload = function(){
 
 function showResult(list){
   App.list = list
+  App.index = 0
   var _height = list.length*50+height
   remote.getCurrentWindow().setSize(width, _height)
 }
