@@ -11,6 +11,10 @@ const width = size[0], height = size[1]
 
 const input = document.getElementById('input')
 
+window.onload = function(){
+  input.focus()
+}
+
 function showResult(list){
   App.list = list
   var _height = list.length*50+height
@@ -21,6 +25,32 @@ function hideResult(){
   remote.getCurrentWindow().setSize(width, height)
 }
 
+document.body.onkeydown = function(e){
+  switch(e.keyCode){
+    // tab
+    case 9:
+      if(App.mode >= 2) App.mode = 0
+      else App.mode++
+      e.returnValue = false
+      break
+    // up
+    case 38:
+      if(App.index > 0)
+        App.index--
+      e.returnValue = false
+      break
+    // down
+    case 40:
+      if(App.index < App.list.length-1)
+        App.index++
+      e.returnValue = false
+      break
+  }
+}
+
+const language = require('./utils/language')
+const googletk = require('./google/token')
+
 var timer_input = null
 
 input.addEventListener('input', (e) => {
@@ -30,11 +60,18 @@ input.addEventListener('input', (e) => {
 
   window.clearTimeout(timer_input)
   timer_input = window.setTimeout(function(){
-    var gt = require('./google/token')
-    var tk = gt.token(text,global.tkk)
+    var source = App.source
+    var target = App.target
+    if(!App.mode){
+      source = language.is(text)
+      if(source=='zh') source = 'zh-CN'
+      target = source == 'en' ? 'zh-CN' : 'en'
+    }
+    
+    var tk = googletk.token(text,global.tkk)
     translate({
-      source: 'zh-CN',
-      target: 'en',
+      source: source,
+      target: target,
       query: text,
       token: tk,
     })
@@ -63,12 +100,14 @@ function translate(opt) {
   var url = 'https://translate.google.cn/translate_a/single?' + arr.join('&')
 
   var request = require('request')
+  App.load = 1
   request(url, function (error, response, body) {
     var json = JSON.parse(body)
     console.log(json)
     var list = json2list(json)
     console.log(list)
     showResult(list)
+    App.load = 0
   })
 }
 

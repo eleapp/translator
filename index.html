@@ -12,18 +12,25 @@ ul,li{margin: 0;padding: 0;list-style: none;}
 #topbox{
   width: 590px;height: 50px;
   margin: 5px;
-  background-color: #ccc;
 }
 #input{
   width: 490px;height: 50px;
   display: block;float: left;
   margin: 0;padding: 0;
   border: none;outline: none;
+  font-size: 24px;
+  font-weight: lighter;
 }
-.logo,.load{
+.mode,.load{
   width: 50px;height: 50px;
   display: block;float: left;
-  background: red;
+  line-height: 50px;
+  text-align: center;
+}
+.mode img,.load img{
+  width: 32px;height: 32px;
+  border: none;
+  vertical-align: middle;
 }
 
 #result li{
@@ -32,28 +39,62 @@ ul,li{margin: 0;padding: 0;list-style: none;}
   line-height: 50px;
   text-align: center;
 }
+#result li.active{
+  background: #ccc;
+}
 </style>
 </head>
 <body>
   <div id="app">
     <div id="topbox">
-      <span class="logo"></span>
-      <input type="text" id="input">
-      <span class="load"></span>
+      <span class="mode">
+        <img :src="cate">
+      </span>
+      <input type="text" id="input" onblur="this.focus()">
+      <span class="load">
+        <img v-if="load==1" src="./assets/images/loading.gif">
+      </span>
     </div>
     <div id="result">
       <ul>
-        <li v-for="item in list">{{item}}</li>
+        <li v-for="(item, i) in list" :class="i==index?'active':''">{{item}}</li>
       </ul>
     </div>
   </div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="./assets/js/vue.js"></script>
 <script>
 var App = new Vue({
   el: '#app',
   data: {
-    list: []
+    list: [],
+    load: 0, // 1-loading
+    mode: 0, // 0-auto 1-zh-en 2-en-zh
+    source: '',
+    target: '',
+    index: 0,
+  },
+  watch: {
+    mode: function(v){
+      switch(v){
+        case 0:
+          break
+        case 1:
+          this.source = 'zh-CN'
+          this.target = 'en'
+          break
+        case 2:
+          this.source = 'en'
+          this.target = 'zh-CN'
+          break
+      }
+    }
+  },
+  computed: {
+    cate(){
+      if(!this.mode) return './assets/images/logo.png'
+      return './assets/images/cate_'+this.source+'_'+this.target+'.png'
+    }
   }
 })
 
