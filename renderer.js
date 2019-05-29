@@ -33,6 +33,13 @@ document.body.onkeydown = function(e){
       else App.mode++
       e.returnValue = false
       break
+    // esc
+    case 27:
+      if(input.value){
+        input.value = ''
+        hideResult()
+      }
+      else remote.getCurrentWindow().hide()
     // up
     case 38:
       if(App.index > 0)

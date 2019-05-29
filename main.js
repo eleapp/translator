@@ -1,6 +1,12 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, globalShortcut} = require('electron')
 
+const electron = require('electron')
+const Menu = electron.Menu
+const Tray = electron.Tray
+
+const path = require('path')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -38,12 +44,50 @@ function initShortcut(){
   })
 }
 
+// Initial tray
+let tray = null
+function initTray(){
+  tray = new Tray(path.join(__dirname, 'assets/images/icon.png'))
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Toggle Translator',
+      type: 'normal',
+      click: trayToggle
+    },
+    { type: 'separator' },
+    {
+      label: 'Preferences',
+      type: 'normal',
+      click: traySetup
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit',
+      type: 'normal',
+      click: function(){app.quit()}
+    }
+  ])
+  tray.setContextMenu(contextMenu)
+}
+
+function trayToggle(){
+  if(mainWindow.isVisible())
+    mainWindow.hide()
+  else
+    mainWindow.show()
+}
+
+function traySetup(){
+  console.log('setup')
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', function(){
   createWindow()
   initShortcut()
+  initTray()
 })
 
 // Quit when all windows are closed.
@@ -62,6 +106,8 @@ app.on('activate', function () {
 app.on('browser-window-blur', function(){
   mainWindow.hide()
 })
+
+app.dock.hide()
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
