@@ -5,7 +5,7 @@ const path = require('path')
 // the default config
 const Default = {
     results: 5,
-    opacity: 1,
+    opacity: 100,
 }
 
 // config file path
@@ -36,11 +36,21 @@ function mkdir(dirpath){
 }
 
 function get(){
-    return isExist() ? read() : Default
+    var config = isExist() ? read() : Default
+    return valid(config) ? config : Default
 }
 
 function set(config){
+    if(!valid(config)) return
     write(config)
+}
+
+function valid(config){
+    if(isNaN(config.results) || config.results < 1 || config.results > 10)
+        return false
+    if(isNaN(config.opacity) || config.opacity < 1 || config.opacity > 100)
+        return false
+    return true
 }
 
 module.exports = {
