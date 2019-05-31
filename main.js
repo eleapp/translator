@@ -7,6 +7,10 @@ const Tray = electron.Tray
 
 const path = require('path')
 
+// Define config
+const cfg = require('./utils/config')
+global.config = cfg.get()
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -78,7 +82,20 @@ function trayToggle(){
 }
 
 function traySetup(){
-  console.log('setup')
+  let setupWindow = new BrowserWindow({
+    width: 600,
+    height: 200,
+    webPreferences: {
+      nodeIntegration: true
+    },
+    titleBarStyle: 'hidden',
+  })
+
+  setupWindow.loadFile('setup.html')
+
+  setupWindow.on('closed', function () {
+    setupWindow = null
+  })
 }
 
 // This method will be called when Electron has finished

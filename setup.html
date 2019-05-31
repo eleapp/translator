@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<style>
+html,body{width: 100%;height: 100%;margin: 0;padding: 0;}
+body{overflow: hidden;}
+
+.titlebar{
+    width: 100%;height: 30px;
+    -webkit-app-region: drag;
+}
+
+.option{
+    width: 100%;height: auto;
+    clear: both;
+    line-height: 50px;
+    text-align: center;
+}
+.option .title,.option .value{
+    height: 50px;
+    float: left;
+}
+.option .title{
+    width: 200px;
+    margin-right: 20px;
+    text-align: right;
+}
+.option .value{}
+
+.option .value input{
+    width: 100px;height: 20px;
+}
+</style>
+</head>
+<body>
+    <div class="titlebar"></div>
+    <form id="form" onsubmit="return false">
+    <div class="option">
+        <div class="title">翻译结果上限</div>
+        <div class="value">
+            <input type="text" name="results">
+            <span>(1~10)</span>
+        </div>
+    </div>
+    <div class="option">
+        <div class="title">透明度</div>
+        <div class="value">
+            <input type="text" name="opacity">
+            <span>(1~100)</span>
+        </div>
+    </div>
+    <div class="option">
+        <div class="title"></div>
+        <div class="value">
+            <button onclick="save()">保存设置</button>
+        </div>
+    </div>
+    </form>
+</body>
+<script>
+const config = require('./utils/config')
+const former = require('./utils/former')
+const form = document.forms[0]
+
+window.onload = function(){
+    former.parse(config.get(), form)
+}
+
+function save(){
+    var json = former.format(form)
+
+    json.results = parseInt(json.results)
+    json.opacity = parseInt(json.opacity)
+
+    if(isNaN(json.results) || json.results < 1 || json.results > 10)
+        return form.querySelector('[name="results"]').focus()
+    if(isNaN(json.opacity) || json.opacity < 1 || json.opacity > 100)
+        return form.querySelector('[name="opacity"]').focus()
+
+    config.set(json)
+}
+</script>
+</html>
