@@ -60,6 +60,7 @@ body{overflow: hidden;}
     </form>
 </body>
 <script>
+const { ipcRenderer } = require('electron')
 const config = require('./utils/config')
 const former = require('./utils/former')
 const form = document.forms[0]
@@ -80,6 +81,8 @@ function save(){
         return form.querySelector('[name="opacity"]').focus()
 
     config.set(json)
+
+    ipcRenderer.sendSync('relaunch')
 }
 </script>
 </html>

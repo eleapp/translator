@@ -1,9 +1,12 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, globalShortcut} = require('electron')
-
-const electron = require('electron')
-const Menu = electron.Menu
-const Tray = electron.Tray
+const {
+  app,
+  Menu,
+  Tray,
+  BrowserWindow,
+  globalShortcut,
+  ipcMain,
+} = require('electron')
 
 const path = require('path')
 
@@ -24,6 +27,7 @@ function createWindow () {
       nodeIntegration: true
     },
     frame: false,
+    opacity: global.config.opacity/100,
   })
 
   // and load the index.html of the app.
@@ -128,3 +132,9 @@ app.dock.hide()
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+// ipcMain
+ipcMain.on('relaunch', (event, arg) => {
+  app.relaunch()
+  app.exit(0)
+})

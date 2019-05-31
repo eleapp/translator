@@ -5,6 +5,7 @@
 var global = {}
 
 const { remote } = require('electron')
+const config = remote.getGlobal('config')
 
 const size = remote.getCurrentWindow().getSize()
 const width = size[0], height = size[1]
@@ -16,6 +17,7 @@ window.onload = function(){
 }
 
 function showResult(list){
+  list = list.slice(0, config.results)
   App.list = list
   App.index = 0
   var _height = list.length*50+height
