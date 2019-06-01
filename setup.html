@@ -2,21 +2,24 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title></title>
+<title>Translator</title>
 <style>
+*{-webkit-user-select: none}
 html,body{width: 100%;height: 100%;margin: 0;padding: 0;}
 body{overflow: hidden;}
 
-.titlebar{
-    width: 100%;height: 30px;
-    -webkit-app-region: drag;
+#app{
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .option{
     width: 100%;height: auto;
     clear: both;
+    overflow: hidden;
     line-height: 50px;
     text-align: center;
+    font-size: 12px;
 }
 .option .title,.option .value{
     height: 50px;
@@ -29,26 +32,29 @@ body{overflow: hidden;}
 }
 .option .value{}
 
-.option .value input{
-    width: 100px;height: 20px;
+input.large{
+    width: 180px;
+}
+input.small{
+    width: 80px;
 }
 </style>
 </head>
 <body>
-    <div class="titlebar"></div>
-    <form id="form" onsubmit="return false">
+    <div id="app">
+    <input type="hidden" name="home">
     <div class="option">
         <div class="title">翻译结果上限</div>
         <div class="value">
-            <input type="text" name="results">
-            <span>(1~10)</span>
+            <input class="small" type="text" name="results">
+            <span class="tip">(1~10)</span>
         </div>
     </div>
     <div class="option">
         <div class="title">透明度</div>
         <div class="value">
-            <input type="text" name="opacity">
-            <span>(1~100)</span>
+            <input class="small" type="text" name="opacity">
+            <span class="tip">(1~100)</span>
         </div>
     </div>
     <div class="option">
@@ -57,13 +63,13 @@ body{overflow: hidden;}
             <button onclick="save()">保存设置</button>
         </div>
     </div>
-    </form>
+    </div>
 </body>
 <script>
 const { ipcRenderer } = require('electron')
 const config = require('./utils/config')
 const former = require('./utils/former')
-const form = document.forms[0]
+const form = document.body
 
 window.onload = function(){
     former.parse(config.get(), form)

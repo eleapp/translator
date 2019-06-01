@@ -4,7 +4,13 @@
 
 var global = {}
 
-const { remote } = require('electron')
+const {
+  remote,
+  clipboard,
+} = require('electron')
+
+const request = require('request')
+
 const config = remote.getGlobal('config')
 
 const size = remote.getCurrentWindow().getSize()
@@ -14,6 +20,7 @@ const input = document.getElementById('input')
 
 window.onload = function(){
   input.focus()
+  init_tkk()
 }
 
 function showResult(list){
@@ -54,6 +61,11 @@ document.body.onkeydown = function(e){
       if(App.index < App.list.length-1)
         App.index++
       e.returnValue = false
+      break
+    // Enter
+    case 13:
+      clipboard.writeText(App.list[App.index])
+      remote.getCurrentWindow().hide()
       break
   }
 }
@@ -107,7 +119,7 @@ function translate(opt) {
   for (var i in dt)
       arr.push('dt=' + dt[i])
   
-  var url = 'https://translate.google.cn/translate_a/single?' + arr.join('&')
+  var url = config.home + '/translate_a/single?' + arr.join('&')
 
   var request = require('request')
   App.load = 1
@@ -136,13 +148,8 @@ function json2list(json){
 }
 
 function init_tkk(){
-  var home = 'https://translate.google.cn'
-  var request = require('request')
-
-  request(home, function (error, response, body) {
+  request(config.home, function (error, response, body) {
     var matched = body.match(/tkk:'(\d+\.\d+)'/)
     if(matched.length > 1) global.tkk = matched[1]
   })
 }
-
-init_tkk()

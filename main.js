@@ -92,7 +92,6 @@ function traySetup(){
     webPreferences: {
       nodeIntegration: true
     },
-    titleBarStyle: 'hidden',
   })
 
   setupWindow.loadFile('setup.html')
@@ -125,7 +124,7 @@ app.on('activate', function () {
 })
 
 app.on('browser-window-blur', function(){
-  mainWindow.hide()
+  if(mainWindow) mainWindow.hide()
 })
 
 app.dock.hide()

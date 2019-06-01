@@ -4,6 +4,7 @@ const path = require('path')
 
 // the default config
 const Default = {
+    home: 'https://translate.google.com',
     results: 5,
     opacity: 100,
 }
